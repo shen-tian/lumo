@@ -1,4 +1,9 @@
 language: clojure
+
+script:
+- lein test
+- lein uberjar
+
 deploy:
   provider: releases
   api_key:
