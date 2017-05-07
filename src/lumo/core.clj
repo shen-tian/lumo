@@ -48,5 +48,5 @@
 (defn -main
   []
   (let [client (init-client)]
-    (println ":: lumo ::")
+    (println ":: starting lumo ::")
     (run client)))
