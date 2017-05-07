@@ -2,7 +2,8 @@
   (:require [clj-time.core :as t]
             [clojure.string :as str]
             [com.evocomputing.colors :as c]
-            [clj-opc.core :as opc])
+            [clj-opc.core :as opc]
+            [environ.core :refer [env]])
   (:gen-class))
 
 ;; Some time of day lookups
@@ -127,7 +128,11 @@
 
 (defn init-client
   []
-  (opc/client "127.0.0.1" 7890 1000))
+  (opc/client (if-let [host (env :opc-host)]
+                host "127.0.0.1")
+              (if-let [port (env :opc-port)]
+                port 7890)
+              1000))
 
 (defn -main
   []
