@@ -4,5 +4,6 @@ deploy:
   api_key:
     secure: S8bumWm9Ql5XfXiAOyHme078JSug7wnN0OwYQJ216QnhnhnljLsNN8WWSOfHSVkDN7iCT7FUlSu02rhiJBQc1SKvdsFmI6tfQ38OCOzxAeEMpU895NAL0n/b8tQnfaXUSC1caxsX8nlrng/xwKWJg+QCA0a5Ak5E2Zb3fk8ymphB9g+pVKkJU+MYgqSRR+UNwVM9XZ2g9ADKDvdWz4nTnR9nekIKnIjieVnESJPGWrM3zgn4yKniSevAzMz11laB2P/tcbuUfhqJtiLEqMqoadTAO8FpAO/omslCoaOchd6x1UCCtqaVjUMhr5K0lzU+eHJeYe5R+ojae8rFzPFxdc2h/fjIXvXDYz59CWy7kNtnbxahL42GvJpPzHNsvggPZUnb1m1K8FeqV7HI7gl4G1TZioqqF+JAk78/+cZ4RZ3G3PT15dCKW3xN3v7EZQkmq6QKQYHAPiLlQiaszUwmOARwzMHOftsGGPpVjE5C0tsTjYXzpdjAbSe6fQ7gYJoDxCi2++mg1x5Fru1jx5S6s0lMGN6Q2lo3+LYSyth9kXvJJm4S+M4gcDWU0MxA+WE340RiqKDwgMN05PzB9FAwv/+WIcKuzTg3MJ0aL6wr7MgsWv5JrMnVgoNr08vti4xeK57psRhcnciQJcCyz/0y0j9yOobN4CoQaeRvY/Gm9GY=
   file: target/lumo-0.1.0-SNAPSHOT-standalone.jar
+  skip_cleanup: true
   on:
     repo: shen-tian/lumo
