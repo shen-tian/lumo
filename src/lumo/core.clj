@@ -42,19 +42,6 @@
        (Math/abs (double (- (inc x) y)))
        (Math/abs (double (- (dec x) y)))))
 
-(defn map-to-strip
-  [t]
-  (let [len 50
-        sec (+ (* (t/milli t) 0.001) (t/second t))
-        base-color (c/create-color 
-                    {:h (get-hue (t/hour (utc->sast t)))
-                     :s 50
-                     :l (get-lumin (t/hour (utc->sast t)))})
-        pos (/ (mod sec 10.0) 10.0)]
-    (map #(c/darken base-color
-                    (* 100 (dist (/ % len) pos)))
-         (range len))))
-
 (defn breath
   "Breathing function. Period 1, Range [0,1]
   http://sean.voisen.org/blog/2011/10/breathing-led-with-arduino/"
@@ -109,6 +96,21 @@
                      :l ((lin-trans heart 1 70) sec)})]
     (map #(c/darken base-color
                     (* 50 (dist (/ % len) 0)))
+         (range len))))
+
+(defn map-to-strip
+  [t]
+  (let [len 50
+        sec (+ (* (t/milli t) 0.001) (t/second t))
+        base-color (c/create-color 
+                    {:h (get-hue (t/hour (utc->sast t)))
+                     :s 50
+                     :l (*
+                         ((lin-trans breath 3 1) sec)
+                         (get-lumin (t/hour (utc->sast t))))})
+        pos (/ (mod sec 10.0) 10.0)]
+    (map #(c/darken base-color
+                    (* 100 (dist (/ % len) pos)))
          (range len))))
 
 (defn tick
