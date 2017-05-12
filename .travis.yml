@@ -2,13 +2,15 @@ language: clojure
 script:
 - lein test
 - lein uberjar
+- mkdir jar
+- mv target/*.jar jar
 deploy:
   provider: s3
   access_key_id: AKIAJAPXZV7ZF426KCHA
   secret_access_key:
     secure: KEidE1zeou6xF78+Elg2Eb5SCQbe5X/ETkhc5H0IPNGp5Mi4z4B4fvcW2SkDkwaiug9mEguNxVnGihOMCBgobSNhwuj3X697JcbHILMy+b4m3yK17ZkCNgePb2IdvpHNFQ/5ae+EfsExHJy9rVFF+jZRC0fSJuLebJon+eGnSRhxhKnFsJy/h/uJzBUWgqLINNGJUhrk1dk+pTGikoseq3Zo6K4Mnv6jYljCyNK/+AFGMa0JXrZidaoIuzlMDEmQn6GHZoDIReZ0HaQurllTZm6ionkq4vyT1KgD6c69u/c8fgj82HsQS+C8tqmSh3PhEobZXdQKOcO3lShOHZv9KFWvr7qKTfQmt0/RXyuFPxlMbW2/T107FZvxV8lMIr3RmA8graEuwN4Wr1XhgCvraS8wtXuLvu0Zx8nhue7EyLX7NCTiPzkj9AYpYovWLIll31AwC/OzqIiDLELsgDy8vSVkQJ+hC5d6oDFptkRTC0SQZr4jl1GnFiCvrrQPwo27gs84Hgs1hgsLSKueNyekBRRSYOhdDNEg4wog1xFGPT5vVmJxUdx2HuwvJWaVyHovftYlSAQ6qQeBqKrp4f9HiMws0xrLTXqMYAbbcrQFxu+/23+X0kAEoDW4FKV3sr74QE4Rz09iF7k41K+KkB4r5nZWO7lgN8/TUlgvxB43kgc=
   bucket: lumo-bin
-  local-dir: target
+  local-dir: jar
   skip_cleanup: true
   acl: public_read
   on:
