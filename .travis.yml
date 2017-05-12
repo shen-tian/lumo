@@ -1,16 +1,14 @@
 language: clojure
-
 script:
 - lein test
 - lein uberjar
-
 deploy:
-  provider: releases
-  api_key:
-    secure: S8bumWm9Ql5XfXiAOyHme078JSug7wnN0OwYQJ216QnhnhnljLsNN8WWSOfHSVkDN7iCT7FUlSu02rhiJBQc1SKvdsFmI6tfQ38OCOzxAeEMpU895NAL0n/b8tQnfaXUSC1caxsX8nlrng/xwKWJg+QCA0a5Ak5E2Zb3fk8ymphB9g+pVKkJU+MYgqSRR+UNwVM9XZ2g9ADKDvdWz4nTnR9nekIKnIjieVnESJPGWrM3zgn4yKniSevAzMz11laB2P/tcbuUfhqJtiLEqMqoadTAO8FpAO/omslCoaOchd6x1UCCtqaVjUMhr5K0lzU+eHJeYe5R+ojae8rFzPFxdc2h/fjIXvXDYz59CWy7kNtnbxahL42GvJpPzHNsvggPZUnb1m1K8FeqV7HI7gl4G1TZioqqF+JAk78/+cZ4RZ3G3PT15dCKW3xN3v7EZQkmq6QKQYHAPiLlQiaszUwmOARwzMHOftsGGPpVjE5C0tsTjYXzpdjAbSe6fQ7gYJoDxCi2++mg1x5Fru1jx5S6s0lMGN6Q2lo3+LYSyth9kXvJJm4S+M4gcDWU0MxA+WE340RiqKDwgMN05PzB9FAwv/+WIcKuzTg3MJ0aL6wr7MgsWv5JrMnVgoNr08vti4xeK57psRhcnciQJcCyz/0y0j9yOobN4CoQaeRvY/Gm9GY=
-  file: target/lumo-0.1.0-SNAPSHOT-standalone.jar
-  skip_cleanup: true
-  overwrite: true
+  provider: s3
+  access_key_id: AKIAJAPXZV7ZF426KCHA
+  secret_access_key:
+    secure: KEidE1zeou6xF78+Elg2Eb5SCQbe5X/ETkhc5H0IPNGp5Mi4z4B4fvcW2SkDkwaiug9mEguNxVnGihOMCBgobSNhwuj3X697JcbHILMy+b4m3yK17ZkCNgePb2IdvpHNFQ/5ae+EfsExHJy9rVFF+jZRC0fSJuLebJon+eGnSRhxhKnFsJy/h/uJzBUWgqLINNGJUhrk1dk+pTGikoseq3Zo6K4Mnv6jYljCyNK/+AFGMa0JXrZidaoIuzlMDEmQn6GHZoDIReZ0HaQurllTZm6ionkq4vyT1KgD6c69u/c8fgj82HsQS+C8tqmSh3PhEobZXdQKOcO3lShOHZv9KFWvr7qKTfQmt0/RXyuFPxlMbW2/T107FZvxV8lMIr3RmA8graEuwN4Wr1XhgCvraS8wtXuLvu0Zx8nhue7EyLX7NCTiPzkj9AYpYovWLIll31AwC/OzqIiDLELsgDy8vSVkQJ+hC5d6oDFptkRTC0SQZr4jl1GnFiCvrrQPwo27gs84Hgs1hgsLSKueNyekBRRSYOhdDNEg4wog1xFGPT5vVmJxUdx2HuwvJWaVyHovftYlSAQ6qQeBqKrp4f9HiMws0xrLTXqMYAbbcrQFxu+/23+X0kAEoDW4FKV3sr74QE4Rz09iF7k41K+KkB4r5nZWO7lgN8/TUlgvxB43kgc=
+  bucket: lumo-bin
+  local-dir: target
+  acl: public_read
   on:
     repo: shen-tian/lumo
-    tags: true

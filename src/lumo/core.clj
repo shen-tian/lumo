@@ -11,17 +11,18 @@
 (defn get-hue
   [hour]
   (cond
-    (< hour 6)  150 ;;"pre-dawn" green
+    (< hour 6)  30 ;;"pre-dawn" yellow
     (< hour 8)  180 ;;"dawn"     teal
     (< hour 17) 60  ;;"day"      yellow
     (< hour 20) 300 ;;"dusk"     pink
-    (< hour 24) 270 ;;"evening"  purple
+    (< hour 22) 270 ;; purple
+    (< hour 24) 30 ;;"evening"  yellow
     :else "wot"))
 
 (defn get-lumin
   [hour]
   (cond
-    (< hour 6) 10
+    (< hour 6) 25
     (< hour 8) 50
     (< hour 17) 10
     (< hour 20) 50
@@ -100,17 +101,17 @@
 
 (defn map-to-strip
   [t]
-  (let [len 50
-        sec (+ (* (t/milli t) 0.001) (t/second t))
+  (let [len  50
+        sec  (+ (* (t/milli t) 0.001) (t/second t))
+        hue  (get-hue (t/hour (utc->sast t)))
+        lum  (get-lumin (t/hour (utc->sast t)))
         base-color (c/create-color 
-                    {:h (get-hue (t/hour (utc->sast t)))
+                    {:h hue
                      :s 50
-                     :l (*
-                         ((lin-trans breath 3 1) sec)
-                         (get-lumin (t/hour (utc->sast t))))})
-        pos (/ (mod sec 10.0) 10.0)]
+                     :l (* ((lin-trans breath 3 1) sec) lum)})
+        pos 0.5]
     (map #(c/darken base-color
-                    (* 100 (dist (/ % len) pos)))
+                    (* lum (dist (/ % len) pos)))
          (range len))))
 
 (defn tick
@@ -119,6 +120,17 @@
   ([client pattern-map time]
    (opc/show! client (map color->word
                           (pattern-map time)))))
+
+(defn run-pattern-at 
+  [client pattern-map h m]
+  (let [offset (t/in-seconds 
+                (t/interval (t/now) 
+                            (t/date-time 2020 1 1 h m)))]
+    (while true
+      (do
+        (let [t (t/plus (t/now) (t/seconds offset))]
+          (tick client pattern-map t))
+        (Thread/sleep 33)))))
 
 (defn run-pattern
   [client pattern-map]
