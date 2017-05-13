@@ -134,19 +134,19 @@
        breath-map
        (map #(c/saturate % 60))
        (map #(set-hue %2 %1)
-            (map #(+ 30 (* 2 120 (dist 0.5 (/ % 50)))) (range 50)))
-       (map #(darken-relative % 60))
-       (map #(c/color-add % (c/create-color {:h 30 :s 100 :l 15})))))
+            (map #(+ 30 (* 2 90 (dist 0.5 (/ % 50)))) (range 50)))
+       (map #(darken-relative % 80))
+       (map #(c/color-add % (c/create-color {:h 30 :s 100 :l 10})))))
 
 (defn evening-map
   [t]
   (->> t
        breath-map
-       (pmap #(c/saturate % 85))
-       (pmap #(set-hue %2 %1)
+       (map #(c/saturate % 85))
+       (map #(set-hue %2 %1)
             (map #(+ 274 (- (* 2 130 (dist 0.5 (/ % 50))))) 
                  (range 50)))
-       (pmap #(darken-relative % 20))))
+       (map #(darken-relative % 20))))
 
 (defn master-map
   [t]
