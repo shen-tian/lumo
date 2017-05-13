@@ -6,6 +6,21 @@
             [environ.core :refer [env]])
   (:gen-class))
 
+(defn set-hue
+  [color degrees]
+  (c/create-color :h (c/clamp-hue degrees)
+                  :s (c/saturation color)
+                  :l (c/lightness color) :a (c/alpha color)))
+
+(defn darken-relative
+  [color percent]
+  (c/create-color :h (c/hue color)
+                  :s (c/saturation color)
+                  :l (c/clamp-percent-float 
+                      (* (c/lightness color) 
+                         (- 1.0 (/ percent 100.0))))
+                  :a (c/alpha color)))
+
 ;; Some time of day lookups
 
 (defn get-hue
@@ -80,7 +95,7 @@
         sec (+ (* (t/milli t) 0.001) (t/second t))
         base-color (c/create-color 
                     {:h 0
-                     :s 40
+                     :s 0
                      :l ((lin-trans breath 3 100) sec)})]
     (map #(c/darken base-color
                     (* 100 (dist (/ % len) 0.5)))
@@ -117,17 +132,29 @@
   [t]
   (->> t
        breath-map
-       (map #(c/adjust-hue %2 %1)
-            (map #(+ 30 (* 2 180 (dist 0.5 (/ % 50)))) (range 50)))
-       (map #(c/darken %1 40))
+       (map #(c/saturate % 60))
+       (map #(set-hue %2 %1)
+            (map #(+ 30 (* 2 120 (dist 0.5 (/ % 50)))) (range 50)))
+       (map #(darken-relative % 60))
        (map #(c/color-add % (c/create-color {:h 30 :s 100 :l 15})))))
+
+(defn evening-map
+  [t]
+  (->> t
+       breath-map
+       (map #(c/saturate % 85))
+       (map #(set-hue %2 %1)
+            (map #(+ 274 (- (* 2 130 (dist 0.5 (/ % 50))))) 
+                 (range 50)))
+       (map #(darken-relative % 20))))
 
 (defn master-map
   [t]
   (let [hour (t/hour (utc->sast t))]
     (cond
       (< hour 6)  (sleep-map t) 
-      (< hour 22) (map-to-strip t)
+      (< hour 17) (map-to-strip t)
+      (< hour 22) (evening-map t)
       (< hour 24) (sleep-map t)  ;;"evening"  yellow
       :else "wot")))
 
