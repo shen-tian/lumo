@@ -13,7 +13,7 @@
   (cond
     (< hour 6)  30 ;;"pre-dawn" yellow
     (< hour 8)  180 ;;"dawn"     teal
-    (< hour 17) 60  ;;"day"      yellow
+    (< hour 17) 240  ;;"day"      yellow
     (< hour 20) 300 ;;"dusk"     pink
     (< hour 22) 270 ;; purple
     (< hour 24) 30 ;;"evening"  yellow
