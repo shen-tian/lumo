@@ -1,5 +1,7 @@
 # lumo
 
+[![Build Status](https://travis-ci.org/shen-tian/lumo.svg?branch=master)](https://travis-ci.org/shen-tian/lumo)
+
 A Clojure app for controlling some LEDs via OPC
 
 ## Usage

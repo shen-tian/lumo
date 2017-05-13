@@ -79,12 +79,11 @@
   (let [len 50
         sec (+ (* (t/milli t) 0.001) (t/second t))
         base-color (c/create-color 
-                    {:h 180
+                    {:h 0
                      :s 40
-                     :l ((lin-trans breath 3 100) sec)})
-        pos (/ (mod sec 10.0) 10.0)]
+                     :l ((lin-trans breath 3 100) sec)})]
     (map #(c/darken base-color
-                    (* 100 (dist (/ % len) pos)))
+                    (* 100 (dist (/ % len) 0.5)))
          (range len))))
 
 (defn heart-map
@@ -113,6 +112,24 @@
     (map #(c/darken base-color
                     (* lum (dist (/ % len) pos)))
          (range len))))
+
+(defn sleep-map
+  [t]
+  (->> t
+       breath-map
+       (map #(c/adjust-hue %2 %1)
+            (map #(+ 30 (* 2 180 (dist 0.5 (/ % 50)))) (range 50)))
+       (map #(c/darken %1 40))
+       (map #(c/color-add % (c/create-color {:h 30 :s 100 :l 15})))))
+
+(defn master-map
+  [t]
+  (let [hour (t/hour (utc->sast t))]
+    (cond
+      (< hour 6)  (sleep-map t) 
+      (< hour 22) (map-to-strip t)
+      (< hour 24) (sleep-map t)  ;;"evening"  yellow
+      :else "wot")))
 
 (defn tick
   ([client pattern-map]
@@ -152,4 +169,4 @@
   []
   (let [client (init-client)]
     (println ":: starting lumo ::")
-    (run-pattern client map-to-strip)))
+    (run-pattern client master-map)))
