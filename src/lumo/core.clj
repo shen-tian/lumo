@@ -142,11 +142,11 @@
   [t]
   (->> t
        breath-map
-       (map #(c/saturate % 85))
-       (map #(set-hue %2 %1)
+       (pmap #(c/saturate % 85))
+       (pmap #(set-hue %2 %1)
             (map #(+ 274 (- (* 2 130 (dist 0.5 (/ % 50))))) 
                  (range 50)))
-       (map #(darken-relative % 20))))
+       (pmap #(darken-relative % 20))))
 
 (defn master-map
   [t]
