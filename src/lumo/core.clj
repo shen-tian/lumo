@@ -25,7 +25,7 @@
     (< hour 6) 25
     (< hour 8) 50
     (< hour 17) 15
-    (< hour 20) 50
+    (< hour 20) 75
     (< hour 24) 30
     :else 0))
 
