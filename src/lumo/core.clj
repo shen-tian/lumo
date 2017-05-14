@@ -1,9 +1,11 @@
 (ns lumo.core
   (:require [clj-time.core :as t]
+            [clj-time.coerce :as coerce]
             [clojure.string :as str]
             [com.evocomputing.colors :as c]
             [clj-opc.core :as opc]
-            [environ.core :refer [env]])
+            [environ.core :refer [env]]
+            [aleph.http :as http])
   (:gen-class))
 
 (defn set-hue
@@ -165,6 +167,13 @@
    (opc/show! client (map color->word
                           (pattern-map time)))))
 
+(def state (atom {:last "Init"
+                  :ticks []}))
+
+(defn add-tick
+  [col tick]
+  (into [] (drop (max (- (count col) 20) 0) (conj col tick))))
+
 (defn run-pattern-at 
   [client pattern-map h m]
   (let [offset (t/in-seconds 
@@ -174,6 +183,7 @@
       (do
         (let [t (t/plus (t/now) (t/seconds offset))]
           (tick client pattern-map t))
+        (swap! state update-in [:ticks] add-tick (coerce/to-long (t/now)))
         (Thread/sleep 33)))))
 
 (defn run-pattern
@@ -182,6 +192,7 @@
     (do
       (let [now (t/now)]
         (tick client pattern-map now))
+      (swap! state update-in [:ticks] add-tick (coerce/to-long (t/now)))
       (Thread/sleep 33))))
 
 (defn init-client
@@ -192,8 +203,19 @@
                 port 7890)
               1000))
 
+(defn handler [req]
+  {:status 200
+   :headers {"content-type" "text/plain"}
+   :body (let [ticks (:ticks @state)]
+           (str (into [] (map #(- %1 %2) ticks (drop 1 ticks)))))})
+
+(defn init-web-server
+  []
+  (http/start-server handler {:port 8080}))
+
 (defn -main
   []
-  (let [client (init-client)]
+  (let [client (init-client)
+        ws     (init-web-server)]
     (println ":: starting lumo ::")
     (run-pattern client master-map)))
