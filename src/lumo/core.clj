@@ -193,7 +193,7 @@
       (let [now (t/now)]
         (tick client pattern-map now))
       (swap! state update-in [:ticks] add-tick (coerce/to-long (t/now)))
-      (Thread/sleep 33))))
+      (Thread/sleep 16))))
 
 (defn init-client
   []
