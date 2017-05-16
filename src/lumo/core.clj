@@ -154,8 +154,8 @@
        (map #(c/saturate % 60))
        (map #(set-hue %2 %1)
             (map #(+ 30 (* 2 60 (dist 0.5 (/ % 50)))) (range 50)))
-       (map #(darken-relative % 80))
-       (map #(c/color-add % (c/create-color {:h 30 :s 100 :l 5})))))
+       (map #(darken-relative % 95))
+       (map #(c/color-add % (c/create-color {:h 30 :s 100 :l 10})))))
 
 (defn evening-map
   [t]
