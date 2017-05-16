@@ -5,7 +5,9 @@
             [com.evocomputing.colors :as c]
             [clj-opc.core :as opc]
             [environ.core :refer [env]]
-            [aleph.http :as http])
+            [aleph.http :as http]
+            [clisk.live :as clisk]
+            [thi.ng.math.noise :as noise])
   (:gen-class))
 
 (defn set-hue
@@ -130,6 +132,21 @@
                     (* lum (dist (/ % len) pos)))
          (range len))))
 
+(defn pulse-map
+  [t]
+  (let [len  50
+        sec  (+ (* (t/milli t) 0.001) (t/second t))
+        hue  0
+        lum  50
+        base-color (c/create-color 
+                    {:h hue
+                     :s 50
+                     :l 50})
+        pos (+ 0.5 (* 0.5 (noise/noise1 (/ (coerce/to-long t) 1000))))]
+    (map #(c/darken base-color
+                    (* 200 (dist (/ % len) pos)))
+         (range len))))
+
 (defn sleep-map
   [t]
   (->> t
@@ -137,18 +154,19 @@
        (map #(c/saturate % 60))
        (map #(set-hue %2 %1)
             (map #(+ 30 (* 2 60 (dist 0.5 (/ % 50)))) (range 50)))
-       (map #(darken-relative % 90))
-       (map #(c/color-add % (c/create-color {:h 30 :s 100 :l 10})))))
+       (map #(darken-relative % 80))
+       (map #(c/color-add % (c/create-color {:h 30 :s 100 :l 5})))))
 
 (defn evening-map
   [t]
   (->> t
        breath-map
        (map #(c/saturate % 85))
+       (map #(darken-relative % 60))
+       (map #(c/color-add % (c/create-color {:h 0 :s 85 :l 20})))
        (map #(set-hue %2 %1)
             (map #(+ 274 (- (* 2 130 (dist 0.5 (/ % 50))))) 
-                 (range 50)))
-       (map #(darken-relative % 20))))
+                 (range 50)))))
 
 (defn master-map
   [t]
